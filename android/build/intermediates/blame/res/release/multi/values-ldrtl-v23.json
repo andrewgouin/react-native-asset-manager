@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "/Users/singularity/gloo/gloo-capture/node_modules/react-native-asset-manager/android/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-ldrtl-v23/values-ldrtl-v23.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 112,
+                    "endOffset": 163
+                },
+                "from": {
+                    "file": "/Users/singularity/.android/build-cache/2b54b9cb4ac3d752f7ac1fc835fc90567f94b682/output/res/values-ldrtl-v23/values-ldrtl-v23.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 298,
+                        "endColumn": 112,
+                        "endOffset": 406
+                    }
+                }
+            }
+        ]
+    }
+]

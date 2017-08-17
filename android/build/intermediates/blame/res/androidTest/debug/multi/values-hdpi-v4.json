@@ -1,0 +1,28 @@
+[
+    {
+        "outputFile": "/Users/singularity/gloo/gloo-capture/node_modules/react-native-asset-manager/android/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-hdpi-v4/values-hdpi-v4.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endLine": 6,
+                    "endColumn": 13,
+                    "endOffset": 327
+                },
+                "from": {
+                    "file": "/Users/singularity/.android/build-cache/2b54b9cb4ac3d752f7ac1fc835fc90567f94b682/output/res/values-hdpi/values-hdpi.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 293,
+                        "endLine": 8,
+                        "endColumn": 13,
+                        "endOffset": 565
+                    }
+                }
+            }
+        ]
+    }
+]

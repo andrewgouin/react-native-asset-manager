@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "/Users/singularity/gloo/gloo-capture/node_modules/react-native-asset-manager/android/build/intermediates/res/merged/debug/color/abc_primary_text_disable_only_material_dark.xml",
+        "source": "/Users/singularity/.android/build-cache/2b54b9cb4ac3d752f7ac1fc835fc90567f94b682/output/res/color/abc_primary_text_disable_only_material_dark.xml"
+    },
+    {
+        "merged": "/Users/singularity/gloo/gloo-capture/node_modules/react-native-asset-manager/android/build/intermediates/res/merged/debug/color/abc_search_url_text.xml",
+        "source": "/Users/singularity/.android/build-cache/2b54b9cb4ac3d752f7ac1fc835fc90567f94b682/output/res/color/abc_search_url_text.xml"
+    },
+    {
+        "merged": "/Users/singularity/gloo/gloo-capture/node_modules/react-native-asset-manager/android/build/intermediates/res/merged/debug/color/abc_primary_text_material_light.xml",
+        "source": "/Users/singularity/.android/build-cache/2b54b9cb4ac3d752f7ac1fc835fc90567f94b682/output/res/color/abc_primary_text_material_light.xml"
+    },
+    {
+        "merged": "/Users/singularity/gloo/gloo-capture/node_modules/react-native-asset-manager/android/build/intermediates/res/merged/debug/color/abc_secondary_text_material_dark.xml",
+        "source": "/Users/singularity/.android/build-cache/2b54b9cb4ac3d752f7ac1fc835fc90567f94b682/output/res/color/abc_secondary_text_material_dark.xml"
+    },
+    {
+        "merged": "/Users/singularity/gloo/gloo-capture/node_modules/react-native-asset-manager/android/build/intermediates/res/merged/debug/color/abc_secondary_text_material_light.xml",
+        "source": "/Users/singularity/.android/build-cache/2b54b9cb4ac3d752f7ac1fc835fc90567f94b682/output/res/color/abc_secondary_text_material_light.xml"
+    },
+    {
+        "merged": "/Users/singularity/gloo/gloo-capture/node_modules/react-native-asset-manager/android/build/intermediates/res/merged/debug/color/abc_primary_text_disable_only_material_light.xml",
+        "source": "/Users/singularity/.android/build-cache/2b54b9cb4ac3d752f7ac1fc835fc90567f94b682/output/res/color/abc_primary_text_disable_only_material_light.xml"
+    },
+    {
+        "merged": "/Users/singularity/gloo/gloo-capture/node_modules/react-native-asset-manager/android/build/intermediates/res/merged/debug/color/switch_thumb_material_dark.xml",
+        "source": "/Users/singularity/.android/build-cache/2b54b9cb4ac3d752f7ac1fc835fc90567f94b682/output/res/color/switch_thumb_material_dark.xml"
+    },
+    {
+        "merged": "/Users/singularity/gloo/gloo-capture/node_modules/react-native-asset-manager/android/build/intermediates/res/merged/debug/color/abc_primary_text_material_dark.xml",
+        "source": "/Users/singularity/.android/build-cache/2b54b9cb4ac3d752f7ac1fc835fc90567f94b682/output/res/color/abc_primary_text_material_dark.xml"
+    },
+    {
+        "merged": "/Users/singularity/gloo/gloo-capture/node_modules/react-native-asset-manager/android/build/intermediates/res/merged/debug/color/switch_thumb_material_light.xml",
+        "source": "/Users/singularity/.android/build-cache/2b54b9cb4ac3d752f7ac1fc835fc90567f94b682/output/res/color/switch_thumb_material_light.xml"
+    }
+]

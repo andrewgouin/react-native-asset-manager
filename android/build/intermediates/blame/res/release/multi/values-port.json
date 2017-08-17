@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "/Users/singularity/gloo/gloo-capture/node_modules/react-native-asset-manager/android/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-port/values-port.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 55,
+                    "endOffset": 106
+                },
+                "from": {
+                    "file": "/Users/singularity/.android/build-cache/2b54b9cb4ac3d752f7ac1fc835fc90567f94b682/output/res/values-port/values-port.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 287,
+                        "endColumn": 55,
+                        "endOffset": 338
+                    }
+                }
+            }
+        ]
+    }
+]

@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "/Users/singularity/gloo/gloo-capture/node_modules/react-native-asset-manager/android/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-w500dp-v13/values-w500dp-v13.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 54,
+                    "endOffset": 105
+                },
+                "from": {
+                    "file": "/Users/singularity/.android/build-cache/2b54b9cb4ac3d752f7ac1fc835fc90567f94b682/output/res/values-w500dp/values-w500dp.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 290,
+                        "endColumn": 54,
+                        "endOffset": 340
+                    }
+                }
+            }
+        ]
+    }
+]
