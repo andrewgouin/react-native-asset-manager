@@ -16,20 +16,14 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 
-import android.content.ContextWrapper;
-import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.DocumentsContract;
+
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -230,22 +224,6 @@ class AssetManager extends ReactContextBaseJavaModule {
     width = photos.getInt(widthIndex);
     height = photos.getInt(heightIndex);
 
-    /*if (width <= 0 || height <= 0) {
-      try {
-        AssetFileDescriptor photoDescriptor = resolver.openAssetFileDescriptor(photoUri, "r");
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        // Set inJustDecodeBounds to true so we don't actually load the Bitmap, but only get its
-        // dimensions instead.
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFileDescriptor(photoDescriptor.getFileDescriptor(), null, options);
-        photoDescriptor.close();
-
-        width = options.outWidth;
-        height = options.outHeight;
-      } catch (IOException e) {
-        return false;
-      }
-    }*/
     image.putDouble("width", width);
     image.putDouble("height", height);
     node.putMap("image", image);
