@@ -39,7 +39,7 @@ getMoreAssets(){
     this.lastCursor = null;
     AssetManager.getAssets(numberOfAssetsPerFetch, this.lastCursor).then((r)=>{
         this.lastCursor = r.page_info.end_cursor;
-        // photos are in r.edges
+        // assets are in r.edges
         // thumbnail for videos and images in r.edges[i].node.image.thumb
     });
 }
