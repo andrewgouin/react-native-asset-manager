@@ -5,6 +5,30 @@ Get assets (images and videos) from Android
 npm i --save https://github.com/andrewgouin/react-native-asset-manager/tarball/master
 ```
 
+## Add to settings.gradle
+```
+include ':react-native-asset-manager'
+project(':react-native-asset-manager').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-asset-manager/android')
+```
+
+## Add to /app/build.gradle dependencies
+```
+  compile project(':react-native-asset-manager')
+```
+
+## Add to MainApplication.java
+```
+import com.agouin.assetmanager.RNAssetManagerPackage;
+...
+  public List<ReactPackage> getPackages() {
+    return Arrays.<ReactPackage>asList(
+    new RNAssetManagerPackage(),
+    ...
+     );
+  }
+...
+```
+
 # Usage
 This functions in a manner similar to react-native CameraRoll
 ```
