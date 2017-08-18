@@ -1,11 +1,11 @@
 Get assets (images and videos) from Android
 
-#Install
+# Install
 ```
 npm i --save https://github.com/andrewgouin/react-native-asset-manager/tarball/master
 ```
 
-#Usage
+# Usage
 This functions in a manner similar to react-native CameraRoll
 ```
 import AssetManager from 'react-native-asset-manager';
