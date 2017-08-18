@@ -1,6 +1,7 @@
 package com.agouin.assetmanager;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 
 import com.facebook.react.bridge.GuardedAsyncTask;
@@ -15,14 +16,23 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 
+import android.content.ContextWrapper;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 class AssetManager extends ReactContextBaseJavaModule {
@@ -39,15 +49,17 @@ class AssetManager extends ReactContextBaseJavaModule {
             MediaStore.Files.FileColumns.MIME_TYPE,
             MediaStore.Files.FileColumns.TITLE,
             MediaStore.Files.FileColumns.WIDTH,
-            MediaStore.Files.FileColumns.HEIGHT
+            MediaStore.Files.FileColumns.HEIGHT,
+            MediaStore.Images.Thumbnails.DATA
     };
   }
 
-  private static final String SELECTION = MediaStore.Files.FileColumns.MEDIA_TYPE + "="
+  private static final String SELECTION = "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "="
           + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
           + " OR "
           + MediaStore.Files.FileColumns.MEDIA_TYPE + "="
-          + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
+          + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO +
+          ")";
 
   public AssetManager(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -59,22 +71,25 @@ class AssetManager extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void getAssets(int first, Promise promise) {
-    new GetAssetsTask(getReactApplicationContext(), first, promise).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+  public void getAssets(int first, @Nullable String after, Promise promise) {
+    new GetAssetsTask(getReactApplicationContext(), first, after, promise).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
   }
 
   private static class GetAssetsTask extends GuardedAsyncTask<Void,Void> {
     private final Context mContext;
     private final Promise mPromise;
     private final int mFirst;
+    private final String mAfter;
 
     protected GetAssetsTask(
             ReactContext context,
             int first,
+            String after,
             Promise promise) {
       super(context);
       this.mContext = context;
       this.mFirst = first;
+      this.mAfter = after;
       this.mPromise = promise;
     }
 
@@ -82,14 +97,22 @@ class AssetManager extends ReactContextBaseJavaModule {
     protected void doInBackgroundGuarded(Void... params) {
       WritableMap response = new WritableNativeMap();
       ContentResolver resolver = mContext.getContentResolver();
-      Cursor assets = resolver.query(MediaStore.Files.getContentUri("external"), PROJECTION, SELECTION, null, MediaStore.Files.FileColumns.DATE_ADDED + " DESC, " + MediaStore.Files.FileColumns.DATE_MODIFIED + " DESC LIMIT " +
+      String selection;
+      String[] selectionArgs = null;
+      if (mAfter != null){
+        selection = SELECTION + " AND "+  MediaStore.Files.FileColumns.DATE_ADDED + " < ?";
+        selectionArgs = new String[] {mAfter};
+      } else {
+        selection = SELECTION;
+      }
+      Cursor assets = resolver.query(MediaStore.Files.getContentUri("external"), PROJECTION, selection, selectionArgs, MediaStore.Files.FileColumns.DATE_ADDED + " DESC, " + MediaStore.Files.FileColumns.DATE_MODIFIED + " DESC LIMIT " +
               (mFirst + 1));
       if (assets == null) {
         mPromise.reject("AssetManager failure", "Unable to load assets");
         return;
       }
       try {
-        putEdges(resolver, assets, response, mFirst);
+        putEdges(mContext, resolver, assets, response, mFirst);
         putPageInfo(assets, response, mFirst);
       } catch (Exception exception) {
         mPromise.reject("AssetManager failure", "Error placing assets into map");
@@ -112,6 +135,7 @@ class AssetManager extends ReactContextBaseJavaModule {
   }
 
   private static void putEdges(
+          Context context,
           ContentResolver resolver,
           Cursor photos,
           WritableMap response,
@@ -127,10 +151,11 @@ class AssetManager extends ReactContextBaseJavaModule {
     for (int i = 0; i < limit && !photos.isAfterLast(); i++) {
       WritableMap edge = new WritableNativeMap();
       WritableMap node = new WritableNativeMap();
-      boolean imageInfoSuccess = putImageInfo(resolver, photos, node, idIndex, widthIndex, heightIndex);
-      if (imageInfoSuccess) {
+      String assetInfoKey = putAssetInfo(context, resolver, photos, node, idIndex, widthIndex, heightIndex);
+      if (assetInfoKey != null) {
         putBasicNodeInfo(photos, node, mimeTypeIndex, dateAddedIndex);
         edge.putMap("node", node);
+        edge.putString("key", assetInfoKey);
         edges.pushMap(edge);
       } else {
         // we skipped an image because we couldn't get its details (e.g. width/height), so we
@@ -151,7 +176,32 @@ class AssetManager extends ReactContextBaseJavaModule {
     node.putDouble("timestamp", photos.getLong(dateTakenIndex) / 1000d);
   }
 
-  private static boolean putImageInfo(
+  private static String writeBitmapToFile(Context context, Bitmap bitmap, String imageName) {
+    FileOutputStream out = null;
+    String filePath = context.getCacheDir() + "/" + imageName +".png";
+    File file = new File(filePath);
+    if(file.exists()) return filePath;
+    try {
+      out = new FileOutputStream(filePath);
+      bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+      // PNG is a lossless format, the compression factor (100) is ignored
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (out != null) {
+          out.close();
+          return filePath;
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    return null;
+  }
+
+  private static String putAssetInfo(
+          Context context,
           ContentResolver resolver,
           Cursor photos,
           WritableMap node,
@@ -163,12 +213,24 @@ class AssetManager extends ReactContextBaseJavaModule {
             MediaStore.Files.getContentUri("external"),
             photos.getString(idIndex));
     image.putString("uri", photoUri.toString());
+    boolean isVideo = photos.getInt(photos.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE)) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
+    String filePath = photos.getString(photos.getColumnIndex(MediaStore.Files.FileColumns.DATA));
+    final String thumbpath;
+    if (isVideo) {
+      Bitmap thumb = ThumbnailUtils.createVideoThumbnail(filePath,
+              MediaStore.Images.Thumbnails.MINI_KIND);
+      thumbpath = writeBitmapToFile(context, thumb, photos.getString(idIndex));
+      image.putString("path",filePath);
+    } else {
+      thumbpath = photos.getString(photos.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
+    }
+    image.putString("thumb", Uri.fromFile(new File(thumbpath)).toString());
     float width = -1;
     float height = -1;
     width = photos.getInt(widthIndex);
     height = photos.getInt(heightIndex);
 
-    if (width <= 0 || height <= 0) {
+    /*if (width <= 0 || height <= 0) {
       try {
         AssetFileDescriptor photoDescriptor = resolver.openAssetFileDescriptor(photoUri, "r");
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -183,11 +245,11 @@ class AssetManager extends ReactContextBaseJavaModule {
       } catch (IOException e) {
         return false;
       }
-    }
+    }*/
     image.putDouble("width", width);
     image.putDouble("height", height);
     node.putMap("image", image);
-    return true;
+    return photos.getString(idIndex);
   }
 
 }
