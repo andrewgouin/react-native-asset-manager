@@ -1,5 +1,5 @@
 {
-  "name": "react-native-audio",
+  "name": "react-native-asset-manager",
   "version": "0.0.1",
   "description": "React Native module for getting images and videos from Android",
   "main": "index.js",
