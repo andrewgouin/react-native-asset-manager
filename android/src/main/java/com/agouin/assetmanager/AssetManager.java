@@ -1,7 +1,6 @@
 package com.agouin.assetmanager;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 
 import com.facebook.react.bridge.GuardedAsyncTask;
@@ -44,7 +43,8 @@ class AssetManager extends ReactContextBaseJavaModule {
             MediaStore.Files.FileColumns.TITLE,
             MediaStore.Files.FileColumns.WIDTH,
             MediaStore.Files.FileColumns.HEIGHT,
-            MediaStore.Images.Thumbnails.DATA
+            MediaStore.Images.Thumbnails.DATA,
+            MediaStore.Video.VideoColumns.DURATION
     };
   }
 
@@ -215,6 +215,8 @@ class AssetManager extends ReactContextBaseJavaModule {
               MediaStore.Images.Thumbnails.MINI_KIND);
       thumbpath = writeBitmapToFile(context, thumb, photos.getString(idIndex));
       image.putString("path",filePath);
+      int duration = photos.getInt(photos.getColumnIndex(MediaStore.Video.VideoColumns.DURATION));
+      image.putInt("duration", duration);
     } else {
       thumbpath = photos.getString(photos.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
     }
@@ -229,5 +231,4 @@ class AssetManager extends ReactContextBaseJavaModule {
     node.putMap("image", image);
     return photos.getString(idIndex);
   }
-
 }
