@@ -31,7 +31,7 @@ import com.agouin.assetmanager.RNAssetManagerPackage;
 
 # Usage
 This functions in a manner similar to react-native CameraRoll
-```java
+```javascript
 import AssetManager from 'react-native-asset-manager';
 ...
 const numberOfAssetsPerFetch = 42;
